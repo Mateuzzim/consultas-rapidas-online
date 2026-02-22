@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>NEXUS DATA - Início</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="description" content="NEXUS DATA - A plataforma definitiva para consultas de dados rápidas, seguras e precisas.">
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg-overlay-1: rgba(26, 26, 46, 0.85);
+      --bg-overlay-2: rgba(22, 33, 62, 0.9);
+      --text-main: white;
+      --text-secondary: #d1d1d1;
+      --container-bg: rgba(255, 255, 255, 0.05);
+      --container-border: rgba(255, 255, 255, 0.1);
+      --accent-color: #00d2ff;
+      --highlight-color: #96c93d;
+      --feature-bg: rgba(255, 255, 255, 0.03);
+      --feature-border: rgba(255, 255, 255, 0.05);
+      --feature-bg-hover: rgba(255, 255, 255, 0.08);
+    }
+    body.light-mode {
+      --bg-overlay-1: rgba(240, 242, 245, 0.92);
+      --bg-overlay-2: rgba(255, 255, 255, 0.95);
+      --text-main: #1a1a2e;
+      --text-secondary: #555;
+      --container-bg: rgba(255, 255, 255, 0.6);
+      --container-border: rgba(0, 0, 0, 0.1);
+      --feature-bg: rgba(0, 0, 0, 0.05);
+      --feature-border: rgba(0, 0, 0, 0.1);
+      --feature-bg-hover: rgba(0, 0, 0, 0.1);
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(var(--bg-overlay-1), var(--bg-overlay-2)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .container {
+      padding: 30px;
+      background: var(--container-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid var(--container-border);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      max-width: 900px;
+      width: 90%;
+      margin: 20px;
+      position: relative;
+      max-height: 95vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .logo-area {
+      margin-bottom: 20px;
+    }
+    .logo-area i {
+      font-size: 60px;
+      color: var(--accent-color);
+      text-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 48px;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+    .logo-highlight {
+      color: var(--highlight-color);
+      text-shadow: 0 0 15px rgba(150, 201, 61, 0.6);
+    }
+    p.subtitle {
+      font-size: 20px;
+      color: var(--text-secondary);
+      margin-top: 10px;
+      margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .feature-item {
+      flex: 1;
+      min-width: 140px;
+      padding: 15px;
+      background: var(--feature-bg);
+      border-radius: 15px;
+      border: 1px solid var(--feature-border);
+      transition: 0.3s;
+    }
+    .feature-item:hover {
+      transform: translateY(-5px);
+      background: var(--feature-bg-hover);
+    }
+    .feature-item i {
+      font-size: 22px;
+      color: var(--accent-color);
+      margin-bottom: 8px;
+    }
+    .feature-item h3 {
+      margin: 5px 0;
+      font-size: 15px;
+    }
+    .feature-item p {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .btn-start {
+      display: inline-block;
+      padding: 18px 50px;
+      font-size: 20px;
+      background: linear-gradient(90deg, #00b09b, #96c93d);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: 0.3s;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 20px rgba(150, 201, 61, 0.4);
+      animation: pulse-green 2s infinite;
+    }
+    .btn-start:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px rgba(150, 201, 61, 0.6);
+    }
+    @keyframes pulse-green {
+      0% { box-shadow: 0 0 0 0 rgba(150, 201, 61, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(150, 201, 61, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(150, 201, 61, 0); }
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 32px; }
+      .btn-start { padding: 15px 30px; font-size: 16px; }
+      body { background-attachment: scroll; }
+    }
+    .btn-tema {
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 20px;
+      cursor: pointer;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      transition: 0.3s;
+      z-index: 10;
+    }
+    .btn-tema:hover {
+      transform: rotate(30deg);
+      color: var(--accent-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="btn-tema" onclick="alternarTema()" title="Alternar Tema">
+      <i class="fa-solid fa-sun" id="iconeTema"></i>
+    </button>
+    <div class="logo-area">
+      <i class="fa-solid fa-circle-nodes fa-spin" style="--fa-animation-duration: 15s;" aria-hidden="true"></i>
+      <h1>NEXUS <span class="logo-highlight">DATA</span></h1>
+      <p class="subtitle">A plataforma definitiva para consultas de dados rápidas, seguras e precisas.</p>
+    </div>
+
+    <div class="features">
+      <div class="feature-item">
+        <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+        <h3>Rapidez</h3>
+        <p>Resultados entregues em segundos diretamente no seu dispositivo.</p>
+      </div>
+      <div class="feature-item">
+        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+        <h3>Segurança</h3>
+        <p>Protocolos avançados para garantir o sigilo das suas informações.</p>
+      </div>
+      <div class="feature-item">
+        <i class="fa-solid fa-database" aria-hidden="true"></i>
+        <h3>Dados Precisos</h3>
+        <p>Acesso a bases atualizadas de CPF, CNPJ, Veículos e muito mais.</p>
+      </div>
+    </div>
+
+    <a href="consulta.html" class="btn-start">
+      Acessar Painel <i class="fa-solid fa-arrow-right" style="margin-left: 10px;" aria-hidden="true"></i>
+    </a>
+  </div>
+
+  <script>
+    function alternarTema() {
+      const body = document.body;
+      const icone = document.getElementById('iconeTema');
+      body.classList.toggle('light-mode');
+      if (body.classList.contains('light-mode')) {
+        icone.classList.replace('fa-sun', 'fa-moon');
+        localStorage.setItem('theme', 'light');
+      } else {
+        icone.classList.replace('fa-moon', 'fa-sun');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+    // Carregar tema salvo
+    const temaSalvo = localStorage.getItem('theme');
+    if (temaSalvo === 'light') {
+      document.body.classList.add('light-mode');
+      document.getElementById('iconeTema').classList.replace('fa-sun', 'fa-moon');
+    }
+  </script>
+</body>
+</html>

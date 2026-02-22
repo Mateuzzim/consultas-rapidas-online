@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Consultas Online Rápidas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Realize consultas de CPF, CNPJ, Placa e mais. Resultados rápidos e seguros via WhatsApp.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-overlay-1: rgba(26, 26, 46, 0.85);
+      --bg-overlay-2: rgba(22, 33, 62, 0.9);
+      --text-main: white;
+      --text-secondary: #d1d1d1;
+      --container-bg: rgba(255, 255, 255, 0.05);
+      --container-border: rgba(255, 255, 255, 0.1);
+      --card-bg-1: #667eea;
+      --card-bg-2: #764ba2;
+      --card-text: white;
+      --card-desc: #e0e0e0;
+      --input-bg: rgba(0, 0, 0, 0.3);
+      --input-text: white;
+      --input-border: rgba(255, 255, 255, 0.1);
+    }
+
+    body.light-mode {
+      --bg-overlay-1: rgba(240, 242, 245, 0.92);
+      --bg-overlay-2: rgba(255, 255, 255, 0.95);
+      --text-main: #1a1a2e;
+      --text-secondary: #555;
+      --container-bg: rgba(255, 255, 255, 0.6);
+      --container-border: rgba(0, 0, 0, 0.1);
+      --card-bg-1: #ffffff;
+      --card-bg-2: #f0f2f5;
+      --card-text: #1a1a2e;
+      --card-desc: #666;
+      --input-bg: rgba(255, 255, 255, 0.8);
+      --input-text: #333;
+      --input-border: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Scrollbar Personalizada Neon */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #00d2ff, #96c93d);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 210, 255, 0.5); /* Brilho Neon */
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(var(--bg-overlay-1), var(--bg-overlay-2)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-main);
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      padding: 20px;
+      background: var(--container-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid var(--container-border);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      max-width: 1000px;
+      width: 95%;
+      height: 99vh;
+      overflow-y: auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    p {
+      font-size: 14px;
+      margin-bottom: 15px;
+      color: var(--text-secondary);
+    }
+
+    .servicos {
+      margin-bottom: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .servicos .card {
+      background: linear-gradient(135deg, var(--card-bg-1) 0%, var(--card-bg-2) 100%);
+      padding: 10px;
+      border-radius: 15px;
+      width: 130px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .servicos .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(135deg, var(--card-bg-2) 0%, var(--card-bg-1) 100%);
+    }
+
+    .servicos .card.selected {
+      border: 2px solid #96c93d;
+      box-shadow: 0 0 25px rgba(150, 201, 61, 0.8);
+      transform: scale(1.05);
+    }
+
+    .servicos .card h3 {
+      margin: 5px 0;
+      font-size: 13px;
+      color: var(--card-text);
+    }
+
+    .servicos .card p {
+      margin: 0;
+      font-size: 10px;
+      color: var(--card-desc);
+      line-height: 1.2;
+    }
+
+    .servicos .card i {
+      font-size: 20px;
+      margin-bottom: 3px;
+      margin-right: 0;
+    }
+
+    .botao {
+      display: inline-block;
+      padding: 12px 25px;
+      width: 80%;
+      max-width: 400px;
+      font-size: 16px;
+      background: linear-gradient(90deg, #00b09b, #96c93d);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: 0.3s;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 20px rgba(150, 201, 61, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .botao:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(150, 201, 61, 0.6);
+    }
+
+    /* Animação de pulso para o botão ativo */
+    @keyframes pulse-green {
+      0% { box-shadow: 0 0 0 0 rgba(150, 201, 61, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(150, 201, 61, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(150, 201, 61, 0); }
+    }
+
+    .botao:not(.disabled) {
+      animation: pulse-green 2s infinite;
+    }
+
+    .botao.disabled {
+      background: #7f8c8d;
+      box-shadow: none;
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .botao i {
+      color: #ffffff;
+    }
+
+    .btn-limpar {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 13px;
+      background: transparent;
+      color: #aaa;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+
+    .btn-limpar:hover {
+      background: rgba(255, 0, 85, 0.2);
+      color: white;
+      border-color: #ff0055;
+    }
+
+    .btn-compartilhar {
+      display: inline-block;
+      margin-top: 15px;
+      margin-left: 10px;
+      padding: 10px 20px;
+      font-size: 13px;
+      background: transparent;
+      color: #aaa;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+
+    .btn-compartilhar:hover {
+      background: rgba(0, 210, 255, 0.2);
+      color: white;
+      border-color: #00d2ff;
+      box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+    }
+
+    footer {
+      margin-top: 15px;
+      font-size: 12px;
+      opacity: 0.6;
+      letter-spacing: 1px;
+    }
+
+    footer a {
+      color: var(--text-main);
+      text-decoration: none;
+      margin: 0 5px;
+    }
+
+    i {
+      margin-right: 8px;
+    }
+
+    .input-nome {
+      padding: 10px;
+      border-radius: 50px;
+      border: 2px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--input-text);
+      font-size: 14px;
+      width: 80%;
+      max-width: 400px;
+      margin-bottom: 15px;
+      outline: none;
+      text-align: center;
+      transition: 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .input-nome::placeholder {
+      color: #888;
+      text-transform: none;
+    }
+
+    .input-nome:focus {
+      border-color: #00d2ff;
+      box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    /* Botão de Tema */
+    .btn-tema {
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: 0.3s;
+      margin-left: auto;
+    }
+    .btn-tema:hover {
+      transform: rotate(30deg);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Estilos da Logo */
+    .logo-area {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--container-border);
+    }
+    .logo-area i {
+      font-size: 24px;
+      color: #00d2ff;
+      margin-right: 10px;
+      text-shadow: 0 0 15px rgba(0, 210, 255, 0.8);
+    }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--text-main);
+      text-transform: uppercase;
+    }
+    .logo-highlight {
+      color: #96c93d;
+      text-shadow: 0 0 15px rgba(150, 201, 61, 0.6);
+    }
+
+    /* Adaptação para Celulares (Responsividade) */
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+        width: 95%;
+        max-height: 92vh; /* Ajuste para telas menores */
+      }
+      
+      h1 {
+        font-size: 20px;
+      }
+
+      .servicos .card {
+        width: calc(50% - 8px); /* Força 2 cards por linha */
+        padding: 15px 5px;
+      }
+
+      .logo-text {
+        font-size: 18px;
+      }
+
+      ::-webkit-scrollbar {
+        width: 3px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="logo-area">
+      <i class="fa-solid fa-circle-nodes fa-spin" style="--fa-animation-duration: 10s;" aria-hidden="true"></i>
+      <div class="logo-text">NEXUS <span class="logo-highlight">DATA</span></div>
+      <button class="btn-tema" onclick="alternarTema()" title="Alternar Tema">
+        <i class="fa-solid fa-sun" id="iconeTema"></i>
+      </button>
+    </div>
+    <h1>Consultas Online Rápidas e Seguras</h1>
+    <p>Faça sua consulta de forma rápida e prática!</p>
+    <p style="font-size: 12px; margin-bottom: 20px;">Selecione abaixo o que deseja consultar:</p>
+
+    <div class="servicos">
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+        <h3>Consulta CPF</h3>
+        <p>Retorna nome, nascimento e situação cadastral.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-user" aria-hidden="true"></i>
+        <h3>Consulta Nome</h3>
+        <p>Localize CPF e telefones pelo nome completo.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-phone" aria-hidden="true"></i>
+        <h3>Consulta Telefone</h3>
+        <p>Identifique o titular da linha e operadora.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-car" aria-hidden="true"></i>
+        <h3>Consulta Placa</h3>
+        <p>Dados do veículo, Renavam e proprietário.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-building" aria-hidden="true"></i>
+        <h3>Consulta CNPJ</h3>
+        <p>Dados da empresa, sócios e situação.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
+        <h3>Consulta Endereço</h3>
+        <p>Busca por CEP ou logradouro completo.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-check-to-slot" aria-hidden="true"></i>
+        <h3>Consulta Título</h3>
+        <p>Local de votação e situação eleitoral.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+        <h3>Consulta Score</h3>
+        <p>Análise de crédito e pontuação financeira.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-money-check-dollar" aria-hidden="true"></i>
+        <h3>Consulta PIS</h3>
+        <p>Número do PIS e abono salarial.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-address-card" aria-hidden="true"></i>
+        <h3>Consulta NIS</h3>
+        <p>Número de Identificação Social e benefícios.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+        <h3>Consulta Email</h3>
+        <p>Localize dados vinculados ao endereço de e-mail.</p>
+      </div>
+      <div class="card" onclick="toggleCard(this)">
+        <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+        <h3>Outros Serviços</h3>
+        <p>Consulte para outros tipos de levantamentos.</p>
+      </div>
+    </div>
+
+    <input type="text" id="nomeUsuario" class="input-nome" placeholder="Digite seu nome aqui" oninput="atualizarLinkWhatsapp()">
+    <br>
+
+    <a class="botao disabled" 
+       href="javascript:void(0)" 
+       id="btnWhatsapp"
+       target="_blank">
+       <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Contratar Serviço
+    </a><br>
+
+    <button class="btn-limpar" onclick="limparSelecao()">Limpar Seleção</button>
+    <button class="btn-compartilhar" onclick="compartilharSite()">
+      <i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Compartilhar
+    </button>
+
+    <footer>
+      Atendimento rápido • Sigilo garantido<br><br>
+      <a href="termos.html">Termos de Uso</a> | <a href="#">Política de Privacidade</a>
+    </footer>
+  </div>
+
+  <script>
+    function toggleCard(element) {
+      // Alterna a classe visual 'selected'
+      element.classList.toggle('selected');
+      atualizarLinkWhatsapp();
+    }
+
+    function atualizarLinkWhatsapp() {
+      // Pega todos os cards que possuem a classe 'selected'
+      const selecionados = document.querySelectorAll('.card.selected h3');
+      const btn = document.getElementById('btnWhatsapp');
+      const nomeInput = document.getElementById('nomeUsuario').value.trim();
+      const baseLink = "https://wa.me/5575999111531";
+      
+      // Validação: Se não tiver nome, desabilita o botão
+      if (nomeInput === "") {
+        btn.classList.add('disabled');
+        btn.href = "javascript:void(0)";
+        return;
+      }
+      btn.classList.remove('disabled');
+
+      // Cria a lista de nomes formatada com quebra de linha
+      const listaServicos = Array.from(selecionados).map(card => "- " + card.innerText.trim()).join('\n');
+
+      let mensagem = `Olá, me chamo *${nomeInput}*.\n\nGostaria de contratar os seguintes serviços:\n\n${listaServicos}`;
+      
+      if (selecionados.length === 0) {
+        mensagem = `Olá, me chamo *${nomeInput}*.\n\nGostaria de contratar um serviço.`;
+      }
+
+      // Atualiza o link com a mensagem codificada
+      btn.href = `${baseLink}?text=${encodeURIComponent(mensagem)}`;
+    }
+
+    function limparSelecao() {
+      const cards = document.querySelectorAll('.servicos .card');
+      cards.forEach(card => card.classList.remove('selected'));
+      atualizarLinkWhatsapp();
+    }
+
+    // Garante que o estado inicial esteja correto ao carregar
+    window.onload = function() {
+      atualizarLinkWhatsapp();
+      carregarTema();
+    };
+
+    function compartilharSite() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Consultas Online Rápidas',
+          text: 'Faça sua consulta de forma rápida e prática!',
+          url: window.location.href
+        })
+        .catch((error) => console.log('Erro ao compartilhar', error));
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link copiado para a área de transferência!");
+      }
+    }
+
+    function alternarTema() {
+      const body = document.body;
+      const icone = document.getElementById('iconeTema');
+      
+      body.classList.toggle('light-mode');
+      
+      if (body.classList.contains('light-mode')) {
+        icone.classList.replace('fa-sun', 'fa-moon');
+        localStorage.setItem('theme', 'light');
+      } else {
+        icone.classList.replace('fa-moon', 'fa-sun');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    function carregarTema() {
+      const temaSalvo = localStorage.getItem('theme');
+      if (temaSalvo === 'light') {
+        document.body.classList.add('light-mode');
+        document.getElementById('iconeTema').classList.replace('fa-sun', 'fa-moon');
+      }
+    }
+  </script>
+</body>
+</html>
